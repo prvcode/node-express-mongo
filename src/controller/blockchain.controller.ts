@@ -1,38 +1,46 @@
 import { Request, Response } from "express";
 import {
+  CreateBlockChainNodeInput,
+  ReadBlockChainNodeInput,
   CreateBlockChainInput,
   ReadBlockChainInput,
-  DeleteBlockChainInput,
-  ReadBlockChainNodeInput
+  DeleteBlockChainInput
 } from "../schema/blockchain.schema";
 
 import {
+  createBlockChainNode,
+  getBlockChainNode,
   createBlockChain,
-  deleteBlockChain,
   findBlockChain,
   getBlockChain,
-  getBlockChainNode
+  deleteBlockChain
 } from "../service/blockchain.service";
 
 export async function createBlockChainHandler(
-  req: Request<{}, {}, CreateBlockChainInput["body"]>,
+  req: Request<{}, [], CreateBlockChainInput["body"]>,
   res: Response
 ) {
   const body = req.body;
-  const blockChain = await createBlockChain({ ...body });
+  const blockChain = await createBlockChain(body);
   return res.send(blockChain);
 }
 
 export async function getBlockChainHandler(
-  req: Request<ReadBlockChainInput["params"]>,
+  req: Request,
   res: Response
-) {
-  const origin = req.params.origin;
-  const hops = req.params.hops; 
-  const blockChain = await getBlockChain({ origin, hops });
+) { 
+  const blockChain = await getBlockChain();
   return res.send(blockChain);
 }
 
+export async function createBlockChainNodeHandler(
+  req: Request<{}, {}, CreateBlockChainNodeInput["body"]>,
+  res: Response
+) {
+  const body = req.body;
+  const blockChain = await createBlockChainNode({ ...body });
+  return res.send(blockChain);
+}
 
 export async function getBlockChainNodeHandler(
   req: Request<ReadBlockChainNodeInput["params"]>,
@@ -44,10 +52,8 @@ export async function getBlockChainNodeHandler(
   if (!blockChainNode) {
     return res.sendStatus(404);
   }
-
   return res.send(blockChainNode);
 }
-
 
 export async function deleteBlockChainHandler(
   req: Request<DeleteBlockChainInput["params"]>,

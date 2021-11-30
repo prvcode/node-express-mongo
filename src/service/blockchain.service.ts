@@ -2,24 +2,23 @@ import { FilterQuery, QueryOptions } from "mongoose";
 
 import BlockChainModel, {
   BlockChainDocument,
-  BlockChainInput,
+  BlockChainNodeInput,
 } from "../models/blockchain.model";
 
-
-import { databaseResponseTimeHistogram } from "../utils/metrics";
-
-export async function createBlockChain(input: BlockChainInput) {
-  const metricsLabels = {
-    operation: "createBlockChain",
-  };
-
-  const timer = databaseResponseTimeHistogram.startTimer();
+export async function createBlockChainNode(input: BlockChainNodeInput) {
   try {
     const result = await BlockChainModel.create(input);
-    timer({ ...metricsLabels, success: "true" });
     return result;
   } catch (e) {
-    timer({ ...metricsLabels, success: "false" });
+    throw e;
+  }
+}
+
+export async function createBlockChain(input: Array<BlockChainNodeInput>) {
+  try {
+    const result = await BlockChainModel.insertMany(input);
+    return result;
+  } catch (e) {
     throw e;
   }
 }
@@ -28,38 +27,20 @@ export async function findBlockChain(
   query: FilterQuery<BlockChainDocument>,
   options: QueryOptions = { lean: true }
 ) {
-  const metricsLabels = {
-    operation: "findProduct",
-  };
-
-  const timer = databaseResponseTimeHistogram.startTimer();
   try {
     const result = await BlockChainModel.findOne(query, {}, options);
-    timer({ ...metricsLabels, success: "true" });
     return result;
   } catch (e) {
-    timer({ ...metricsLabels, success: "false" });
 
     throw e;
   }
 }
 
-export async function getBlockChain(
-  query: FilterQuery<BlockChainDocument>,
-  options: QueryOptions = { lean: true }
-) {
-  const metricsLabels = {
-    operation: "findProduct",
-  };
-
-  const timer = databaseResponseTimeHistogram.startTimer();
+export async function getBlockChain() {
   try {
-    const result = await BlockChainModel.findOne(query, {}, options);
-    timer({ ...metricsLabels, success: "true" });
+    const result = await BlockChainModel.find();
     return result;
   } catch (e) {
-    timer({ ...metricsLabels, success: "false" });
-
     throw e;
   }
 }
@@ -68,22 +49,13 @@ export async function getBlockChainNode(
   query: FilterQuery<BlockChainDocument>,
   options: QueryOptions = { lean: true }
 ) {
-  const metricsLabels = {
-    operation: "getBlockChainNode",
-  };
-
-  const timer = databaseResponseTimeHistogram.startTimer();
   try {
     const result = await BlockChainModel.findOne(query, {}, options);
-    timer({ ...metricsLabels, success: "true" });
     return result;
   } catch (e) {
-    timer({ ...metricsLabels, success: "false" });
     throw e;
   }
 }
-
-
 
 export async function deleteBlockChain(query: FilterQuery<BlockChainDocument>) {
   return BlockChainModel.deleteOne(query);

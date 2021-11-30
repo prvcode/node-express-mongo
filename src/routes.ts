@@ -1,12 +1,14 @@
 import { Express, Request, Response } from "express";
 import {
-  createBlockChainHandler,
+  createBlockChainNodeHandler,
   getBlockChainHandler,
   deleteBlockChainHandler,
-  getBlockChainNodeHandler
+  getBlockChainNodeHandler,
+  createBlockChainHandler
 } from "./controller/blockchain.controller";
 
 import {
+ createBlockChainNodeSchema,
  createBlockChainSchema,
  getBlockChainSchema,
  deleteBlockChainSchema,
@@ -17,6 +19,7 @@ import {
 import validateResource from "./middleware/validateResource";
 
 function routes(app: Express) {
+
   app.post(
     "/api/blockchain",
     [validateResource(createBlockChainSchema)],
@@ -24,19 +27,25 @@ function routes(app: Express) {
   );
   
   app.get(
-    "/api/blockchain/:origin/:hops",
+    "/api/blockchain",
     validateResource(getBlockChainSchema),
     getBlockChainHandler
   );
 
-    app.get(
-    "/api/blockchain/:tx_hash",
+  app.post(
+    "/api/blockchain/node",
+    [validateResource(createBlockChainNodeSchema)],
+    createBlockChainNodeHandler
+  );
+
+   app.get(
+    "/api/blockchain/node/:tx_hash",
     validateResource(getBlockChainNodeSchema),
     getBlockChainNodeHandler
   );
 
   app.delete(
-    "/api/blockchain/:tx_hash",
+    "/api/blockchain/node/:tx_hash",
     [validateResource(deleteBlockChainSchema)],
     deleteBlockChainHandler
   );
