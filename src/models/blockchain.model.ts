@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface BlockChainInput {
+export interface BlockChainNodeInput {
   tx_hash: string;
   from: string
   to: string,
@@ -8,7 +8,7 @@ export interface BlockChainInput {
   value: string;
 }
 
-export interface BlockChainDocument extends BlockChainInput, mongoose.Document {}
+export interface BlockChainDocument extends BlockChainNodeInput, mongoose.Document {}
 
 const blockChainSchema = new mongoose.Schema(
   {
@@ -20,6 +20,6 @@ const blockChainSchema = new mongoose.Schema(
   }
 );
 
-const BlockChainModel = mongoose.model<BlockChainDocument>("BlockChain", blockChainSchema);
+const BlockChainModel = mongoose.model("BlockChain", blockChainSchema);
 
 export default BlockChainModel;

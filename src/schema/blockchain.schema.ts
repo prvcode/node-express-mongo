@@ -1,7 +1,6 @@
-import { object, number, string, TypeOf } from "zod";
+import { object, number, string, TypeOf, array } from "zod";
 
-const payload = {
-  body: object({
+const nodePayload = object({
     tx_hash: string({
       required_error: "tx_hash is required",
     }),
@@ -16,8 +15,15 @@ const payload = {
     }),
     value: string({
       required_error: "value is required",
-    }),
-  }),
+    })
+})
+
+const payload = {
+  body: nodePayload,
+};
+
+const arrayPayload = {
+  body: array(nodePayload)
 };
 
 const params = {
@@ -27,7 +33,6 @@ const params = {
     }),
   }),
 };
-
 
 const getParams = {
   params: object({
@@ -40,8 +45,12 @@ const getParams = {
   }),
 };
 
-export const createBlockChainSchema = object({
+export const createBlockChainNodeSchema = object({
   ...payload,
+});
+
+export const createBlockChainSchema = object({
+  ...arrayPayload,
 });
 
 export const deleteBlockChainSchema = object({
@@ -52,10 +61,9 @@ export const getBlockChainNodeSchema = object({
   ...params,
 });
 
-export const getBlockChainSchema = object({
-  ...getParams,
-});
+export const getBlockChainSchema = object({});
 
+export type CreateBlockChainNodeInput = TypeOf<typeof createBlockChainNodeSchema>;
 export type CreateBlockChainInput = TypeOf<typeof createBlockChainSchema>;
 export type ReadBlockChainInput = TypeOf<typeof getBlockChainSchema>;
 export type ReadBlockChainNodeInput = TypeOf<typeof getBlockChainNodeSchema>;
