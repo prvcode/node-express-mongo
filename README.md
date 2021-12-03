@@ -15,7 +15,7 @@
 
 #### Create Blockchain Node
 ```http
-POST http://localhost:8081/api/blockchain/node
+POST /api/blockchain/node
 ```
 ```javascript
 {
@@ -26,18 +26,16 @@ POST http://localhost:8081/api/blockchain/node
     "value" : "21"
 }
 ```
-#### Get Blockchain Node
-```http
-GET http://localhost:8081/api/blockchain/:tx_hash
 ```
 #### Delete Blockchain Node
 
 ```http
-DEL http://localhost:8081/api/blockchain/:tx_hash
+DEL /api/blockchain/node/:tx_hash
 ```
+
 #### Create Blockchain
 ```http
-POST http://localhost:8081/api/blockchain/node
+POST /api/blockchain
 ```
 ```javascript
 [
@@ -59,13 +57,20 @@ POST http://localhost:8081/api/blockchain/node
 ```
 #### Get Blockchain
 ```http
-GET http://localhost:8081/api/blockchain
+GET /api/blockchain
 ```
 #### Get Blockchain Via Orgin and Hops
 ```http
-GET http://localhost:8081/api/blockchain/:origin/:hops
+GET /api/blockchain/:origin/:hops
 ```
 #### Delete Blockchain Node
 ```http
-DEL http://localhost:8081/api/blockchain/remove
+DEL /api/blockchain/remove
+```
+
+## Docker
+
+```javascript
+docker build -t node-express-mongo .
+docker run -p 8081:8081 node-express-mongo
 ```
