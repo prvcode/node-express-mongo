@@ -26,7 +26,7 @@ POST /api/blockchain/node
     "value" : "21"
 }
 ```
-```
+
 #### Delete Blockchain Node
 
 ```http
