@@ -4,7 +4,9 @@ import {
   getBlockChainHandler,
   deleteBlockChainHandler,
   getBlockChainNodeHandler,
-  createBlockChainHandler
+  getHopBlockChainHandler,
+  createBlockChainHandler,
+  removeBlockChainHandler
 } from "./controller/blockchain.controller";
 
 import {
@@ -12,7 +14,8 @@ import {
  createBlockChainSchema,
  getBlockChainSchema,
  deleteBlockChainSchema,
- getBlockChainNodeSchema
+ getBlockChainNodeSchema,
+ emptyBlockChainSchema
 } from "./schema/blockchain.schema";
 
 
@@ -31,6 +34,12 @@ function routes(app: Express) {
     validateResource(getBlockChainSchema),
     getBlockChainHandler
   );
+  
+  app.get(
+    "/api/blockchain/:origin/:hops",
+    validateResource(getBlockChainSchema),
+    getHopBlockChainHandler
+  );
 
   app.post(
     "/api/blockchain/node",
@@ -48,6 +57,12 @@ function routes(app: Express) {
     "/api/blockchain/node/:tx_hash",
     [validateResource(deleteBlockChainSchema)],
     deleteBlockChainHandler
+  );
+
+   app.delete(
+    "/api/blockchain/remove",
+    [validateResource(emptyBlockChainSchema)],
+    removeBlockChainHandler
   );
 }
 
