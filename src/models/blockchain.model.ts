@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 export interface BlockChainNodeInput {
   tx_hash: string;
-  from: string
-  to: string,
+  from: string;
+  to: string;
   timestamp: string;
   value: string;
 }

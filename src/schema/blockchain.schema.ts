@@ -34,13 +34,13 @@ const params = {
   }),
 };
 
-const getParams = {
+const hopParams = {
   params: object({
     origin: string({
-      required_error: "origin is required",
+      required_error: "Origin is required",
     }),
     hops: string({
-      required_error: "hops is required",
+      required_error: "Hops is required",
     }),
   }),
 };
@@ -61,11 +61,17 @@ export const getBlockChainNodeSchema = object({
   ...params,
 });
 
+export const getHopBlockChain = object({
+  ...hopParams,
+});
+
 export const getBlockChainSchema = object({});
+export const emptyBlockChainSchema = object({});
 
 export type CreateBlockChainNodeInput = TypeOf<typeof createBlockChainNodeSchema>;
 export type CreateBlockChainInput = TypeOf<typeof createBlockChainSchema>;
 export type ReadBlockChainInput = TypeOf<typeof getBlockChainSchema>;
 export type ReadBlockChainNodeInput = TypeOf<typeof getBlockChainNodeSchema>;
 export type DeleteBlockChainInput = TypeOf<typeof deleteBlockChainSchema>;
-
+export type ReadHopBlockChainInput = TypeOf<typeof getHopBlockChain>;
+export type EmptyBlockChainInput = TypeOf<typeof emptyBlockChainSchema>;

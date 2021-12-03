@@ -3,7 +3,7 @@ import {
   CreateBlockChainNodeInput,
   ReadBlockChainNodeInput,
   CreateBlockChainInput,
-  ReadBlockChainInput,
+  ReadHopBlockChainInput,
   DeleteBlockChainInput
 } from "../schema/blockchain.schema";
 
@@ -13,7 +13,9 @@ import {
   createBlockChain,
   findBlockChain,
   getBlockChain,
-  deleteBlockChain
+  getHopBlockChain,
+  deleteBlockChain,
+  removeBlockChain
 } from "../service/blockchain.service";
 
 export async function createBlockChainHandler(
@@ -55,6 +57,30 @@ export async function getBlockChainNodeHandler(
   return res.send(blockChainNode);
 }
 
+
+export async function getHopBlockChainHandler(
+  req: Request<ReadHopBlockChainInput["params"]>,
+  res: Response
+) {
+  const origin = req.params.origin;
+  const hops = req.params.hops;
+  
+  if (!origin) {
+    return res.sendStatus(404);
+  }
+
+  if (!hops || (parseInt(hops)==0)) {
+    return res.status(401).send("Invalid hop");
+  }
+
+  const blockChain = await getHopBlockChain({ origin, hops });
+
+  if (!blockChain) {
+    return res.sendStatus(404);
+  }
+  return res.send(blockChain);
+}
+
 export async function deleteBlockChainHandler(
   req: Request<DeleteBlockChainInput["params"]>,
   res: Response
@@ -68,4 +94,12 @@ export async function deleteBlockChainHandler(
 
   await deleteBlockChain({ txHash });
   return res.sendStatus(200);
+}
+
+export async function removeBlockChainHandler(
+  req: Request,
+  res: Response
+) { 
+  await removeBlockChain();
+   return res.sendStatus(200);
 }
