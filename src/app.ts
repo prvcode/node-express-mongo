@@ -7,9 +7,17 @@ import logger from "./utils/logger";
 import routes from "./routes";
 import responseTime from "response-time";
 import { restResponseTimeHistogram } from "./utils/metrics";
+import cors from 'cors';
 
 const port = config.get<number>("port");
 const app = express();
+
+const allowedOrigins = ['http://localhost:3000'];
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+app.use(cors(options));
+
 app.use(express.json());
 
 app.use(
