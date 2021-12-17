@@ -4,7 +4,6 @@ import {
 
 export async function sourceHopTravesal(source:string, hop:number, blockchain:Array<BlockChainNodeInput>, hops:Array<any>) {
     let i = 0
-    let j = hops.length - 1
      if(hop-- == 0) {
         return
     }
@@ -24,9 +23,8 @@ export async function sourceHopTravesal(source:string, hop:number, blockchain:Ar
                 }
                 hops[index] = node
              } else {
-                 j++
                 temp.to.push(blockchain[i].to)
-                hops[j] = blockchain[i]
+                hops[hops.length] = blockchain[i]
                 if(hop > 0) {
                     await sourceHopTravesal(blockchain[i].to, hop, blockchain.slice(i), hops)
                 }
